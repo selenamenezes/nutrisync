@@ -1,49 +1,76 @@
 <?php
-    class Usuario {
-        private $altura;
-        private $cpf;
-        private $imc;
-        private $nome;
-        private $peso;
-        private $sexo;
-        private $telefone;
 
-        function __construct($altura, $cpf, $imc, $nome, $peso, $sexo, $telefone){
-            $this->altura = $altura;
-            $this->cpf = $cpf;
-            $this->imc = $imc;
-            $this->nome = $nome;
-            $this->peso = $peso;
-            $this->sexo = $sexo;
-            $this->telefone = $telefone;
+    /* criar funcao caso precise formatar tel e cpf */
+
+    function cadastro_usuario($conn, $altura, $cpf, $imc, $nome, $peso, $sexo, $telefone){
+        if (empty($cpf) || empty($nome) || empty($sexo) || empty($telefone) || empty($altura) || empty($peso) || empty($imc)) {
+            return "Preencha todos os campos.";
         }
 
-        public function getAltura() {
-            return $this->altura;
+        $cursor = "select cpf from usuario where cpf = '$cpf'";
+        $registro = $conn->query($cursor);
+
+        if($registro->num_rows > 0){
+            return "Usuário já cadastrado.";
         }
-    
-        public function getCpf() {
-            return $this->cpf;
+
+        $nome_title = ucwords(strtolower($nome));
+
+        $cursor = "insert into usuario (cpf, peso, altura, imc, sexo, nome, telefone) values ('$cpf', '$peso', '$altura', '$imc', '$sexo', '$nome_title', '$telefone')";
+
+        if($conn->query($cursor)){
+            return "Bem vindo, $nome_title!";
+        }else {
+            return "Erro ao cadastrar usuário: " . $conn->error;
         }
-    
-        public function getImc() {
-            return $this->imc;
+        
+    }
+
+    function editar_usuario($conn, $altura, $imc, $nome, $peso, $sexo, $telefone){
+        $cursor = "select cpf from usuario where cpf = '$cpf'";
+        $registro = $conn->query($cursor);
+
+        $lista_update = [];
+
+        if($registro->num_rows == 0){
+            return "Usuário não cadastrado.";
         }
-    
-        public function getNome() {
-            return $this->nome;
+
+        if($nome !== null){
+            $nome_title = ucwords(strtolower($nome));
+            $lista_update[] = "nome = '$nome_title'";
         }
-    
-        public function getPeso() {
-            return $this->peso;
+
+        if($altura !== null){
+            $lista_update[] = "altura = '$altura'";
         }
-    
-        public function getSexo() {
-            return $this->sexo;
+
+        if($imc !== null){
+            $lista_update[] = "imc = '$imc'";
         }
-    
-        public function getTelefone() {
-            return $this->telefone;
+
+        if($peso !== null){
+            $lista_update[] = "peso = '$peso'";
+        }
+
+        if($sexo !== null){
+            $lista_update[] = "sexo = '$sexo'";
+        }
+
+        if($telefone !== null){
+            $lista_update[] = "telefone = '$telefone'";
+        }
+
+        if(empty($lista_update)){
+            return "Nenhum campo para atualizar";
+        }
+
+        $cursor = "update usuario set " . implode(", ", $lista_update) . " where cpf = '$cpf'";
+
+        if($conn->query($cursor)) {
+            return "Usuário atualizado!";
+        }else {
+            return "Erro ao atualizar o usuário: " . $conn->error;
         }
     }
 ?>
