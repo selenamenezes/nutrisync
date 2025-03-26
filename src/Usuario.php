@@ -73,4 +73,22 @@
             return "Erro ao atualizar o usuário: " . $conn->error;
         }
     }
+
+    function deletar_usuario($conn, $cpf){
+        $cursor = "select cpf from usuario where cpf = '$cpf'";
+        $registro = $conn->query($cursor);
+
+        if($registro->num_rows == 1){
+            $cursor = "delete usuario where cpf = '$cpf'";
+
+            if($conn->query($cursor)){
+                echo "Usuário deletado.";
+            }else{
+                echo "Erro ao deletar o usuário: " . $conn->error;
+            }
+            
+        }else {
+            echo "Usuário não cadastrado.";
+        }
+    }
 ?>
