@@ -7,11 +7,10 @@
 </head>
 <body>
     <?php
-        require_once "database/data.php";
-        require_once "config/Config.php";
-        require_once "src/Consulta.php";
+        require_once "src/usuario.php";
+        require_once "database/conexao.php";
 
-        
+        $nome = $cpf = $altura = $peso = $sexo = $imc = $telefone = $crn = "";
     ?>
 </body>
 </html>
