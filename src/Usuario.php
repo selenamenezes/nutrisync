@@ -26,7 +26,7 @@
         
     }
 
-    function editar_usuario($conn, $altura, $imc, $nome, $peso, $sexo, $telefone){
+    function editar_usuario($conn, $altura, $imc, $nome, $peso, $sexo, $telefone, $cpf){
         $cursor = "select cpf from usuario where cpf = '$cpf'";
         $registro = $conn->query($cursor);
 
