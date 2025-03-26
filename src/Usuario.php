@@ -61,7 +61,7 @@
     // para consulta
     function dados_usuario($conn, $altura, $imc, $peso, $cpf, $data_nasc){
         // precisa validar esses valores ou mexeram no front?
-        if (empty($altura) || empty($imc) || empty($peso) || empty($cpf)) {
+        if (empty($altura) || empty($imc) || empty($peso) || empty($cpf) || empty($data_nasc)) {
             return "Preencha todos os campos para realizar o agendamento da consulta.";
         }
 
