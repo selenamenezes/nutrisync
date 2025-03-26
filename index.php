@@ -1,16 +1,23 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NutriSync</title>
-</head>
-<body>
-    <?php
-        require_once "src/usuario.php";
-        require_once "database/conexao.php";
+<?php
+    require_once 'teste_usuario.php';
+    require_once 'conexao.php';
 
-        $nome = $cpf = $altura = $peso = $sexo = $imc = $telefone = $crn = "";
-    ?>
-</body>
-</html>
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+        $nome = $_POST['nome_completo'];
+        $email = $_POST['email'];
+        $telefone = $_POST['telefone'];
+        $data_nasc = $_POST['data_nascimento'];
+        $senha = $_POST['senha'];
+        $confirm_senha = $_POST['confirme_senha'];
+        $cpf = $_POST['cpf'];
+
+        $conn = conectar_banco();
+    
+        $resultado = cadastrar_usuario($conn, $nome, $email, $telefone, $data_nasc, $senha, $confirm_senha, $cpf);
+    
+        echo $resultado;
+
+        $conn->close();
+    }
+?>
