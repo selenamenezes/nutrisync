@@ -1,7 +1,7 @@
 <?php
     require_once 'conexao.php';
     /* criar funcao caso precise formatar tel e cpf */
-
+   
     function validar_cpf($cpf){
         $cpf = preg_replace('/[^0-9]/', '', $cpf);
 
@@ -39,10 +39,17 @@
             return "Usuário já cadastrado.";
         }
 
+        $cursor = "select email from usuario where email = '$email'";
+        $registro = $conn->query($cursor);
+
+        if($registro->num_rows > 0){
+            return "E-mail já cadastrado.";
+        }
+
         $senha_cript = password_hash($senha, PASSWORD_DEFAULT);
         $nome_title = ucwords(strtolower($nome)); 
 
-        $cursor = "insert into usuario (cpf, nome, telefone, senha) values ('$cpf', '$nome_title', '$telefone', '$senha_cript')";
+        $cursor = "insert into usuario (cpf, nome, telefone, senha, email) values ('$cpf', '$nome_title', '$telefone', '$senha_cript', '$email')";
    
         if($conn->query($cursor)){
             return "Bem vindo, $nome_title!";

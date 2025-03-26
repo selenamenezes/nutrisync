@@ -1,14 +1,16 @@
 <?php
-    $host = 'localhost';
-    $banco = 'nutrisyncdb';
-    $usuario = 'root';
-    $senha = '';
-
-    $conn = new mysqli($host, $usuario, $senha, $banco);
-
-    if($conn->connect_error){
-        die("Erro na conexão: " . $conn->connect_error);
+    function conectar_banco() {
+        $host = 'localhost';
+        $usuario = 'root';   
+        $senha = '';          
+        $db_name = 'nutrisyncdb';
+    
+        $conn = new mysqli($host, $usuario, $senha, $db_name);
+    
+        if ($conn->connect_error) {
+            die("Falha na conexão com o banco de dados: " . $conn->connect_error);
+        }
+    
+        return $conn;
     }
-
-    echo "Conexão bem-sucedida";
 ?>
