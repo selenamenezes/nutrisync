@@ -1,6 +1,7 @@
 <?php
-    require_once 'teste_usuario.php';
     require_once 'conexao.php';
+    require_once 'nutricionista.php';
+    require_once 'consulta.php';
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -13,9 +14,9 @@
         $cpf = $_POST['cpf'];
 
         $conn = conectar_banco();
-    
+        
         $resultado = cadastrar_usuario($conn, $nome, $email, $telefone, $data_nasc, $senha, $confirm_senha, $cpf);
-    
+        
         echo $resultado;
 
         $conn->close();

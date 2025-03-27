@@ -1,6 +1,19 @@
 <?php
     require_once 'conexao.php';
-    /* criar funcao caso precise formatar tel e cpf */
+
+    function validar_telefone($telefone){
+        $telefone = preg_replace('/\D/', '', $telefone);
+
+        if(strlen($telefone) < 10 || strlen($telefone) > 11){
+            return false;
+        }
+
+        if(strlen($telefone) === 11){
+            return '(' . substr($telefone, 0, 2) . ')' . substr($telefone, 2, 5) . '-' . substr($telefone, 7, 4) . '-' . substr($telefone, 7, 4);
+        }else {
+            return '(' . substr($telefone, 0, 2) . ')' . substr($telefone, 2, 4) . '-' . substr($telefone, 6, 4) . '-' . substr($telefone, 7, 4);
+        }
+    }
    
     function validar_cpf($cpf){
         $cpf = preg_replace('/[^0-9]/', '', $cpf);
@@ -8,7 +21,7 @@
         if (strlen($cpf) != 11) {
             return false;
         }
-        return true;
+        return substr($cpf, 0, 3) . '.' . substr($cpf, 3, 3) . '.' . substr($cpf, 6, 3) . '-' . substr($cpf, 9, 2);
     }
 
     function idade($conn, $data_nasc){
@@ -30,6 +43,10 @@
 
         if (!validar_cpf($cpf)) {
             return "CPF inválido.";
+        }
+
+        if (!validar_telefone($telefone)){
+            return "Telefone inválido.";
         }
 
         $cursor = "select cpf from usuario where cpf = '$cpf'";
@@ -59,6 +76,7 @@
     }
 
     // para consulta
+    // cpf usado para buscar paciente na hora da consulta e preencher os dados
     function dados_usuario($conn, $altura, $imc, $peso, $cpf, $data_nasc){
         // precisa validar esses valores ou mexeram no front?
         if (empty($altura) || empty($imc) || empty($peso) || empty($cpf) || empty($data_nasc)) {
@@ -66,6 +84,10 @@
         }
 
         $idade = idade($data_nasc);
+
+        if (!validar_cpf($cpf)) {
+            return "CPF inválido.";
+        }
 
         $cursor = "select cpf from usuario where cpf = '$cpf'";
         $registro = $conn->query($cursor);
@@ -84,9 +106,16 @@
 
     }
 
+    // cpf usado para buscar paciente e editar os dados
     function editar_usuario($conn, $altura, $imc, $nome, $peso, $sexo, $telefone, $cpf){
+
+        if (!validar_cpf($cpf)) {
+            return "CPF inválido.";
+        }
+
         $cursor = "select cpf from usuario where cpf = '$cpf'";
         $registro = $conn->query($cursor);
+        
 
         $lista_update = [];
 
@@ -133,6 +162,11 @@
     }
 
     function deletar_usuario($conn, $cpf){
+
+        if (!validar_cpf($cpf)) {
+            return "CPF inválido.";
+        }
+
         $cursor = "select cpf from usuario where cpf = '$cpf'";
         $registro = $conn->query($cursor);
 
@@ -149,4 +183,6 @@
             echo "Usuário não cadastrado.";
         }
     }
+
+    // falta funcao de buscar os usuarios (lembrando q o cpf e o telefone esta indo formatado para o banco, na hora da busca tem q puxar as funcoes para formatar e verificar os dados)
 ?>
