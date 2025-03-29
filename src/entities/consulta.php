@@ -46,6 +46,5 @@
         }else {
             return "Erro ao marcar a consulta: " . $conn->error;
         }
-
     }
 ?>

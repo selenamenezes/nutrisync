@@ -3,8 +3,8 @@
     require_once './src/cadastro.php';
     require_once './src/entities/usuario.php';
 
-    function login_usuario($conn, $cpf, $senha){
-        if(empty($cpf) || empty($senha)){
+    function login_usuario($conn, $email, $senha){
+        if(empty($email) || empty($senha)){
             return "Preencha todos os campos.";
         }
 
@@ -12,7 +12,7 @@
             return "CPF inválido.";
         }
 
-        $cursor = "select senha from usuario where cpf = '$cpf'";
+        $cursor = "select senha from usuario where email = '$email'";
         $registro = $conn->query($cursor);
 
         if($registro->num_rows > 0){
@@ -21,12 +21,12 @@
 
             return validar_senha_usuario($senha, $senha_cript) ? "Login realizado com sucesso!" : "Senha incorreta.";
         }else{
-            return "CPF não cadastrado.";
+            return "Usuário não cadastrado.";
         }
     }
 
-    function login_nutricionista($conn, $crn, $senha){
-        if(empty($crn) || empty($senha)){
+    function login_nutricionista($conn, $email, $senha, $crn){
+        if(empty($crn) || empty($senha) || empty($crn)){
             return "Preencha todos os campos.";
         }
 

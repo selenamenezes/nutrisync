@@ -52,4 +52,9 @@
     function validar_senha_usuario($senha, $senha_cript){
         return password_verify($senha, $senha_cript);
     }
+
+    function validar_email($email){
+        return filter_var($email, FILTER_VALIDATE_EMAIL) ? true : false;
+    }
+
 ?>

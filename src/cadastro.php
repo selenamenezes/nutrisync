@@ -19,6 +19,10 @@
             return "Telefone inválido.";
         }
 
+        if (!validar_email($email)){
+            return "E-mail inválido.";
+        }
+
         $cursor = "select cpf from usuario where cpf = '$cpf'";
         $registro = $conn->query($cursor);
 
@@ -41,5 +45,46 @@
         return $conn->query($cursor) ? "Bem vindo, $nome_title!" : "Erro ao cadastrar usuário: " . $conn->error;
     }
 
-    function cadastrar_nutricionista();
+    function cadastrar_nutricionista($conn, $nome, $email, $telefone, $senha, $confirm_senha, $crn){
+        if (empty($crn) || empty($nome) || empty($telefone) || empty($email) || empty($senha) || empty($confirm_senha)) {
+            return "Preencha todos os campos.";
+        }
+
+        if($senha !== $confirm_senha){
+            return "As senhas não coincidem.";
+        }
+
+        if (!validar_cpf($cpf)) {
+            return "CPF inválido.";
+        }
+
+        if (!validar_telefone($telefone)){
+            return "Telefone inválido.";
+        }
+
+        if (!validar_email($email)){
+            return "E-mail inválido.";
+        }
+
+        $cursor = "select cpf from usuario where cpf = '$cpf'";
+        $registro = $conn->query($cursor);
+
+        if($registro->num_rows > 0){
+            return "Nutricionista já cadastrado.";
+        }
+
+        $cursor = "select email from usuario where email = '$email'";
+        $registro = $conn->query($cursor);
+
+        if($registro->num_rows > 0){
+            return "E-mail já cadastrado.";
+        }
+
+        $senha_cript = password_hash($senha, PASSWORD_DEFAULT);
+        $nome_title = ucwords(strtolower($nome)); 
+
+        $cursor = "insert into nutricionista (cpf, nome, telefone, senha, email) values ('$cpf', '$nome_title', '$telefone', '$senha_cript', '$email')";
+   
+        return $conn->query($cursor) ? "Bem vindo, $nome_title!" : "Erro ao cadastrar usuário: " . $conn->error;
+    }
 ?>
